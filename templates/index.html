@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Student Services Portal</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+
+<style>
+  /* Reset & base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(120deg, #1f1c2c, #928dab);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 15px;
+    transition: background 0.3s ease;
+  }
+
+  header {
+    margin-bottom: 30px;
+    text-align: center;
+    user-select: none;
+  }
+  header h1 {
+    font-weight: 700;
+    font-size: 2.8rem;
+    text-shadow: 0 0 10px #6a11cb;
+  }
+
+  /* Tabs container */
+  .tabs {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+  }
+  .tab-button {
+    background: linear-gradient(45deg, #6a11cb, #2575fc);
+    border: none;
+    padding: 14px 30px;
+    font-size: 1.1rem;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 50px;
+    box-shadow: 0 6px 12px rgba(101, 71, 255, 0.6);
+    transition: background 0.3s, box-shadow 0.3s;
+    user-select: none;
+    min-width: 140px;
+    text-align: center;
+  }
+  .tab-button:hover {
+    background: linear-gradient(45deg, #2575fc, #6a11cb);
+    box-shadow: 0 8px 18px rgba(37, 117, 252, 0.9);
+  }
+  .tab-button.active {
+    background: #ffeb3b;
+    color: #1f1c2c;
+    font-weight: 700;
+    box-shadow: 0 8px 20px #ffeb3b;
+  }
+
+  /* Tab content */
+  .tab-content {
+    width: 100%;
+    max-width: 600px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 30px 30px 40px;
+    box-shadow: 0 0 25px rgba(101, 71, 255, 0.3);
+    opacity: 0;
+    transform: translateY(40px);
+    pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .tab-content.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+
+  /* Forms */
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  input, button {
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: none;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+  }
+  input {
+    background-color: #f0f0f0;
+    color: #222;
+    font-weight: 500;
+  }
+  input::placeholder {
+    color: #999;
+  }
+  input:focus {
+    outline: none;
+    box-shadow: 0 0 10px #6a11cb;
+  }
+
+  button[type="submit"] {
+    background: linear-gradient(45deg, #6a11cb, #2575fc);
+    color: white;
+    cursor: pointer;
+    font-weight: 700;
+    box-shadow: 0 6px 15px rgba(101, 71, 255, 0.7);
+    user-select: none;
+  }
+  button[type="submit"]:hover {
+    background: linear-gradient(45deg, #2575fc, #6a11cb);
+    box-shadow: 0 8px 20px rgba(37, 117, 252, 0.9);
+  }
+  button[type="submit"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Chatbot Section Styling */
+  #chat-response {
+    margin-top: 15px;
+    font-size: 1.15rem;
+    min-height: 60px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 15px 20px;
+    box-shadow: inset 0 0 12px #6a11cb;
+    white-space: pre-wrap;
+    user-select: text;
+    line-height: 1.5;
+    font-weight: 600;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  /* Placement Result Box */
+  .result {
+    margin-top: 25px;
+    padding: 20px;
+    background: #222244cc;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 0 20px #ffeb3b;
+    font-weight: 700;
+    font-size: 1.4rem;
+    position: relative;
+  }
+
+  ul {
+    margin-top: 12px;
+    padding-left: 20px;
+    text-align: left;
+  }
+  ul li {
+    color: #ffeb3b;
+    margin: 6px 0;
+    font-weight: 600;
+  }
+
+  /* Animation container for fireworks and breaking egg */
+  #animation-container {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 9999;
+    width: 250px;
+    height: 250px;
+  }
+
+  /* Fireworks animation */
+  .firework {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, #ffeb3b 30%, transparent 70%);
+    border-radius: 50%;
+    animation: explode 1s ease forwards;
+  }
+  @keyframes explode {
+    0% {
+      opacity: 1;
+      transform: scale(0.2) translate(0, 0);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.5) translate(var(--x), var(--y));
+    }
+  }
+
+  /* Egg break animation */
+  #egg {
+    width: 120px;
+    height: 160px;
+    background: #fffacd;
+    border-radius: 60px 60px 80px 80px / 100px 100px 130px 130px;
+    position: relative;
+    margin: 0 auto;
+    box-shadow: inset 0 10px 15px #f7e8a4;
+    cursor: default;
+  }
+  #egg::before, #egg::after {
+    content: "";
+    position: absolute;
+    background: #f4f1d0;
+    width: 60px;
+    height: 80px;
+    border-radius: 50% 50% 60% 60% / 80% 80% 100% 100%;
+    top: 0;
+    box-shadow: inset 0 8px 10px #e6dfa4;
+    transition: transform 1s ease;
+  }
+  #egg::before {
+    left: 0;
+    transform-origin: bottom right;
+  }
+  #egg::after {
+    right: 0;
+    transform-origin: bottom left;
+  }
+  #egg.broken::before {
+    transform: rotate(-45deg) translate(-20px, 20px);
+  }
+  #egg.broken::after {
+    transform: rotate(45deg) translate(20px, 20px);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 700px) {
+    body {
+      padding: 20px 10px;
+    }
+    header h1 {
+      font-size: 2.2rem;
+    }
+    .tab-button {
+      flex: 1 1 100%;
+      max-width: 300px;
+      margin-bottom: 10px;
+      min-width: auto;
+    }
+    .tab-content {
+      padding: 20px 20px 30px;
+      max-width: 100%;
+    }
+    input, button {
+      font-size: 1.1rem;
+      padding: 14px 20px;
+    }
+    #chat-response {
+      font-size: 1rem;
+      min-height: 50px;
+      padding: 12px 15px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎓 Student Services Portal</h1>
+</header>
+
+<div class="tabs" role="tablist" aria-label="Main tabs">
+  <button class="tab-button active" id="btn-chatbot" role="tab" aria-selected="true" aria-controls="chatbot">🤖 Chatbot</button>
+  <button class="tab-button" id="btn-predictor" role="tab" aria-selected="false" aria-controls="predictor">📊 Placement Predictor</button>
+</div>
+
+<!-- Chatbot Section -->
+<div id="chatbot" class="tab-content active" role="tabpanel" aria-labelledby="btn-chatbot">
+  <h2>Ask Gupta ji aapki seva me :</h2>
+  <form id="chat-form" aria-label="Chat with Gupta ji">
+    <input type="text" id="msg" placeholder="Ask me anything..." required autocomplete="off" aria-required="true" aria-describedby="chat-hint" />
+    <button type="submit" aria-label="Send message to Gupta ji">Send</button>
+  </form>
+  <div id="chat-response" aria-live="polite" aria-atomic="true">Gupta ji aapki seva me : Ready to help!</div>
+</div>
+
+<!-- Placement Predictor Section -->
+<div id="predictor" class="tab-content" role="tabpanel" aria-labelledby="btn-predictor">
+  <h2>Placement Prediction Form 🎯</h2>
+  <form id="predict-form" method="POST" action="/predict" aria-label="Placement Prediction Form">
+    <input type="text" name="Name" placeholder="Your Name" required autocomplete="name" />
+    <input type="number" step="0.01" name="CGPA" placeholder="CGPA" required min="0" max="10" />
+    <input type="number" name="Internship" placeholder="Internships (0 or 1)" required min="0" max="1" />
+    <input type="number" name="Communication" placeholder="Communication Skills (1–10)" required min="1" max="10" />
+    <input type="number" name="Technical" placeholder="Technical Skills (1–10)" required min="1" max="10" />
+    <input type="number" name="Certifications" placeholder="Certifications Count" required min="0" />
+    <input type="number" name="Projects" placeholder="Projects Count" required min="0" />
+    <input type="number" name="ExtraActivities" placeholder="Extra Activities (0 or 1)" required min="0" max="1" />
+    <button type="submit">Predict</button>
+  </form>
+
+  <!-- Result will be injected here dynamically -->
+  <div id="prediction-result" class="result" style="display:none;"></div>
+</div>
+
+<!-- Animation container -->
+<div id="animation-container" aria-hidden="true"></div>
+
+<script>
+  // Tab switching with active class and accessibility updates
+  const btnChatbot = document.getElementById('btn-chatbot');
+  const btnPredictor = document.getElementById('btn-predictor');
+  const chatbotTab = document.getElementById('chatbot');
+  const predictorTab = document.getElementById('predictor');
+
+  function setActiveTab(tab) {
+    if(tab === 'chatbot') {
+      btnChatbot.classList.add('active');
+      btnChatbot.setAttribute('aria-selected', 'true');
+      btnPredictor.classList.remove('active');
+      btnPredictor.setAttribute('aria-selected', 'false');
+      chatbotTab.classList.add('active');
+      predictorTab.classList.remove('active');
+    } else {
+      btnPredictor.classList.add('active');
+      btnPredictor.setAttribute('aria-selected', 'true');
+      btnChatbot.classList.remove('active');
+      btnChatbot.setAttribute('aria-selected', 'false');
+      predictorTab.classList.add('active');
+      chatbotTab.classList.remove('active');
+    }
+  }
+  btnChatbot.onclick = () => setActiveTab('chatbot');
+  btnPredictor.onclick = () => setActiveTab('predictor');
+
+  // Chatbot functionality
+  const chatForm = document.getElementById('chat-form');
+  const chatInput = document.getElementById('msg');
+  const chatResponse = document.getElementById('chat-response');
+
+  function typeWriter(text, element, speed = 40) {
+    let i = 0;
+    element.innerText = '';
+    function typing() {
+      if (i < text.length) {
+        element.innerText += text.charAt(i);
+        i++;
+        setTimeout(typing, speed);
+      }
+    }
+    typing();
+  }
+
+  chatForm.onsubmit = async function (e) {
+    e.preventDefault();
+    const msg = chatInput.value.trim();
+    if (!msg) return;
+    chatInput.disabled = true;
+    chatResponse.innerText = 'Gupta ji aapki seva me : ...';
+
+    try {
+      const res = await fetch('/get', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'msg=' + encodeURIComponent(msg)
+      });
+      const text = await res.text();
+      chatResponse.innerText = 'Gupta ji aapki seva me : ';
+      typeWriter(text, chatResponse, 40);
+    } catch (err) {
+      chatResponse.innerText = 'Gupta ji aapki seva me : Sorry, something went wrong.';
+    }
+    chatInput.disabled = false;
+    chatInput.value = '';
+    chatInput.focus();
+  };
+
+  // Placement predictor form handling with animation
+  const predictForm = document.getElementById('predict-form');
+  const predictionResult = document.getElementById('prediction-result');
+  const animationContainer = document.getElementById('animation-container');
+
+  // Simple animations for fireworks (YES) and egg break (NO)
+  function createFireworks() {
+    animationContainer.innerHTML = '';
+    for(let i = 0; i < 20; i++) {
+      const fw = document.createElement('div');
+      fw.className = 'firework';
+      // Random direction & distance for explode animation
+      fw.style.setProperty('--x', (Math.random() * 200 - 100) + 'px');
+      fw.style.setProperty('--y', (Math.random() * 200 - 100) + 'px');
+      fw.style.left = '50%';
+      fw.style.top = '50%';
+      animationContainer.appendChild(fw);
+      setTimeout(() => fw.remove(), 1000);
+    }
+  }
+
+  function createEggBreak() {
+    animationContainer.innerHTML = '';
+    const egg = document.createElement('div');
+    egg.id = 'egg';
+    animationContainer.appendChild(egg);
+    setTimeout(() => egg.classList.add('broken'), 100); // break after small delay
+    setTimeout(() => animationContainer.innerHTML = '', 1500);
+  }
+
+  // Simulated async prediction (for demo; replace with your backend response logic)
+  predictForm.onsubmit = async function(e) {
+    e.preventDefault();
+
+    // Get form data
+    const formData = new FormData(predictForm);
+    // Just for demo: simple logic to simulate yes/no prediction:
+    // If CGPA >= 7 and Communication and Technical >= 7 -> YES else NO
+    const cgpa = parseFloat(formData.get('CGPA'));
+    const comm = parseInt(formData.get('Communication'));
+    const tech = parseInt(formData.get('Technical'));
+
+    predictionResult.style.display = 'none';
+    animationContainer.innerHTML = '';
+
+    // Simulate delay like API call
+    predictionResult.textContent = 'Predicting...';
+    predictionResult.style.display = 'block';
+
+    setTimeout(() => {
+      let prediction = 'NO';
+      if (cgpa >= 7 && comm >=7 && tech >=7) {
+        prediction = 'YES';
+      }
+      predictionResult.textContent = `Placement Prediction: ${prediction}`;
+
+      if(prediction === 'YES') {
+        createFireworks();
+      } else {
+        createEggBreak();
+      }
+    }, 1500);
+  };
+</script>
+
+</body>
+</html>

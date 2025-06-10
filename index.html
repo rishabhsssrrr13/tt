@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chatbot</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; }
+    #chatbox { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: scroll; }
+    .user { color: blue; margin: 5px 0; }
+    .bot { color: green; margin: 5px 0; }
+    #inputForm { margin-top: 10px; }
+    input[type="text"] { width: 80%; padding: 10px; }
+    button { padding: 10px; }
+  </style>
+</head>
+<body>
+  <h2>ML Chatbot</h2>
+  <div id="chatbox"></div>
+
+  <form id="inputForm">
+    <input type="text" id="userInput" autocomplete="off" placeholder="Type your message..." required />
+    <button type="submit">Send</button>
+  </form>
+
+  <script>
+    const chatbox = document.getElementById('chatbox');
+    const inputForm = document.getElementById('inputForm');
+    const userInput = document.getElementById('userInput');
+
+    function addMessage(text, sender) {
+      const messageDiv = document.createElement('div');
+      messageDiv.textContent = text;
+      messageDiv.className = sender;
+      chatbox.appendChild(messageDiv);
+      chatbox.scrollTop = chatbox.scrollHeight; // scroll down automatically
+    }
+
+    inputForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const message = userInput.value.trim();
+      if (!message) return;
+
+      // Show user message
+      addMessage("You: " + message, 'user');
+      userInput.value = '';
+
+      // Send to backend
+      fetch('/get', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'msg=' + encodeURIComponent(message)
+      })
+      .then(response => response.text())
+      .then(data => {
+        // Show bot reply
+        addMessage("Bot: " + data, 'bot');
+      })
+      .catch(err => {
+        addMessage("Bot: Sorry, error occurred.", 'bot');
+      });
+    });
+  </script>
+</body>
+</html>

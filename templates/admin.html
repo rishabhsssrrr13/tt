@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Panel - Chatbot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+    body {
+      background: #0e0e0e;
+      color: #f0f0f0;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #00f2ff;
+      margin-bottom: 2rem;
+    }
+    .flash {
+      background: #ffd700;
+      color: #000;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .form-section {
+      background: #1e1e2e;
+      padding: 2rem;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+    }
+    .form-section h2 {
+      color: #00e6e6;
+      margin-bottom: 1rem;
+    }
+    form {
+      display: grid;
+      gap: 1rem;
+    }
+    input[type="text"] {
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: none;
+      background: #2d2d3d;
+      color: #fff;
+    }
+    input[type="text"]:focus {
+      outline: 2px solid #00f2ff;
+    }
+    button {
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      background: #00f2ff;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #00c4cc;
+    }
+    .intent-section h2 {
+      color: #00e6e6;
+      margin-bottom: 1rem;
+    }
+    .intent-item {
+      background: #2a2a3c;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+    .intent-item input[type="text"] {
+      background: transparent;
+      border: none;
+      color: #fff;
+      width: 90%;
+    }
+    .intent-item input[type="text"]:focus {
+      outline: none;
+      border-bottom: 1px solid #00f2ff;
+    }
+    .actions {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+    .actions a, .actions button {
+      background: #ff4d4d;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 0.8rem;
+      border-radius: 5px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .actions button.update {
+      background: #00cc66;
+    }
+    .logout {
+      text-align: center;
+      margin-top: 2rem;
+    }
+    .logout a {
+      background: #ff9900;
+      color: #000;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      display: inline-block;
+    }
+    @media (max-width: 600px) {
+      .actions {
+        flex-direction: column;
+        right: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Admin Panel - Manage Intents</h1>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash">
+          {% for message in messages %}
+            {{ message }}<br />
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Add Intent Form -->
+    <div class="form-section">
+      <h2>Add New Intent</h2>
+      <form action="{{ url_for('add_intent') }}" method="POST">
+        <input type="text" name="tag" placeholder="Tag (e.g. greeting)" required />
+        <input type="text" name="pattern" placeholder="Pattern (e.g. Hello)" required />
+        <input type="text" name="response" placeholder="Response (e.g. Hi there!)" required />
+        <button type="submit">Add Intent</button>
+      </form>
+    </div>
+
+    <!-- Existing Intents List -->
+    <div class="intent-section">
+      <h2>Existing Intents</h2>
+      {% for intent in intents %}
+        <form action="{{ url_for('update_intent', intent_id=intent.id) }}" method="POST" class="intent-item">
+          <div>
+            <strong>Tag:</strong>
+            <input type="text" name="tag" value="{{ intent.tag }}" required />
+          </div>
+          <div>
+            <strong>Pattern:</strong>
+            <input type="text" name="pattern" value="{{ intent.pattern }}" required />
+          </div>
+          <div>
+            <strong>Response:</strong>
+            <input type="text" name="response" value="{{ intent.response }}" required />
+          </div>
+          <div class="actions">
+            <button type="submit" class="update">Update</button>
+            <a href="{{ url_for('delete_intent', intent_id=intent.id) }}" onclick="return confirm('Are you sure you want to delete this intent?');">Delete</a>
+          </div>
+        </form>
+      {% else %}
+        <p>No intents found.</p>
+      {% endfor %}
+    </div>
+
+    <!-- Logout -->
+    <div class="logout">
+      <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+  </div>
+</body>
+</html>

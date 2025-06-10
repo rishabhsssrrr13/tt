@@ -1,0 +1,14 @@
+{
+  "intents": [
+    {"tag": "greeting", "patterns": ["hi", "hello", "hey", "good morning", "good evening"], "responses": ["Hello! How can I help you today?", "Hi there! Need any help?"]},
+    {"tag": "courses", "patterns": ["What courses are available?", "List programs", "Show degrees"], "responses": ["We offer BCA, MCA, BBA, MBA, and more."]},
+    {"tag": "admission", "patterns": ["How to apply?", "Admission process", "When is admission open?"], "responses": ["Admissions usually start in April. You can apply online on our website."]},
+    {"tag": "fees", "patterns": ["Fee structure?", "What is the tuition fee?", "Fees for MCA"], "responses": ["The fee structure varies by program. For MCA, it's around 70,000 per year."]},
+    {"tag": "contact", "patterns": ["Contact info", "How to contact college?", "Phone number?"], "responses": ["You can reach us at 0120-1234567 or email contact@college.edu"]},
+    {"tag": "placement", "patterns": ["Placement rate?", "Companies visiting?", "Job opportunities?"], "responses": ["We have a 90% placement rate with top companies like TCS, Infosys."]},
+    {"tag": "faculty", "patterns": ["Tell me about faculty", "Who are the teachers?", "Faculty details"], "responses": ["Our faculty includes PhD holders and industry experts in each domain."]},
+    {"tag": "library", "patterns": ["Library facilities?", "Can I borrow books?", "Library timings"], "responses": ["Yes, our library is open from 9 AM to 7 PM. Students can borrow up to 3 books."]},
+    {"tag": "hostel", "patterns": ["Is hostel available?", "Hostel fees?", "Accommodation options"], "responses": ["Yes, hostels are available with separate buildings for boys and girls."]},
+    {"tag": "goodbye", "patterns": ["bye", "see you", "exit", "thank you"], "responses": ["Goodbye! Feel free to ask more anytime.", "Take care!"]}
+  ]
+}

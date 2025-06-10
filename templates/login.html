@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Login - Hacker Style</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Share Tech Mono', monospace;
+      cursor: url("https://cur.cursors-4u.net/cursors/cur-13/cur1190.cur"), auto;
+    }
+
+    body {
+      background: radial-gradient(circle at center, #000000 0%, #010f10 100%);
+      color: #00ff9f;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .login-box {
+      background: rgba(0, 255, 140, 0.05);
+      border: 2px solid #00ff9f;
+      border-radius: 12px;
+      padding: 2rem 3rem;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 0 20px #00ff9f88;
+      animation: popIn 1.2s ease;
+      position: relative;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      color: #00ffcc;
+      margin-bottom: 1.5rem;
+      animation: glitch 1s infinite;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    input {
+      background: #011212;
+      border: 1px solid #00ff9f;
+      padding: 0.8rem 1rem;
+      color: #00ffcc;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: 0.3s ease;
+    }
+
+    input:focus {
+      background: #022222;
+      outline: none;
+      box-shadow: 0 0 10px #00ff9f;
+    }
+
+    button {
+      background: #00ff9f;
+      border: none;
+      padding: 0.8rem;
+      color: #000;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #00e68a;
+      transform: scale(1.05);
+      box-shadow: 0 0 10px #00ff9f;
+    }
+
+    ul {
+      margin-top: 1rem;
+      padding-left: 1rem;
+      color: #ff4d4d;
+    }
+
+    ul li {
+      list-style: none;
+      font-size: 0.9rem;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    /* Glitch animation */
+    @keyframes glitch {
+      0% { text-shadow: 1px 0 red, -1px 0 cyan; }
+      25% { text-shadow: -1px 0 lime, 1px 0 magenta; }
+      50% { text-shadow: 2px 2px red, -2px -2px cyan; }
+      75% { text-shadow: -1px -1px lime, 1px 1px magenta; }
+      100% { text-shadow: 1px 0 red, -1px 0 cyan; }
+    }
+
+    @keyframes popIn {
+      0% {
+        transform: scale(0.95);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Green matrix-style background animation */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("https://i.ibb.co/QH8WjpV/matrix-green.gif");
+      background-size: cover;
+      opacity: 0.05;
+      z-index: -1;
+      animation: slowScroll 40s linear infinite;
+    }
+
+    @keyframes slowScroll {
+      0% { background-position: 0 0; }
+      100% { background-position: 0 1000px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h1>Admin Access</h1>
+    <form method="POST">
+      <input type="password" name="password" placeholder="Enter Admin Password" required>
+      <button type="submit">Login</button>
+    </form>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>⚠ {{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+  </div>
+</body>
+</html>
